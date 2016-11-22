@@ -1,0 +1,25 @@
+En el módulo processing:
+
+• Análisis léxico
+• Eliminación de stopwords
+• Stemming
+• Y otras cositas cómicas que se pueden hacer con NLTK
+
+En el módulo UI:
+
+• La UI tiene que tener:
+    - Un control para elegir el path donde están los archivos a indexar
+    - Un textbox para escribir el query y otro para poner el número de resultados que se desea mostrar
+    - Un listbox o algo así para mostrar el nombre de los archivos relevantes y el ranking que tienen
+    - Un lugar donde se muestren de alguna manera las evaluaciones de la búsqueda: recall, precision, etc.
+    - Según las funcionalidades extras que agreguemos habrá que ponerle más cositas
+
+En el módulo modeling:
+
+• Hay que programar el modelo
+• Ver qué cosas del modelo se pueden almacenar en el índice y cuál es la forma más conveniente de hacerlo
+
+En el módulo evaluating:
+
+• Implementar los métodos de evaluación
+
