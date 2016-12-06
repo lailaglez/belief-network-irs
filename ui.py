@@ -1,20 +1,9 @@
 import modeling
+import os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import sys
 from UI.main import Ui_MainWindow
-
-
-
-# Se llama cuando se cambia el path en la UI
-def build(path):
-    modeling.build(path)
-
-
-# Se llama cuando se realiza una query desde la UI, count es el número de resultados deseados
-def query(query, count):
-    return modeling.query(query, count)
-
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -22,11 +11,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
 
-        self.pushButton.clicked.connect(self.on_button_clicked)
+        self.browseBtn.clicked.connect(self.on_browse_clicked)
+        self.buildBtn.clicked.connect(self.on_build_clicked)
+        self.queryBtn.clicked.connect(self.on_query_clicked)
 
-    def on_button_clicked(self):
-        print("button")
-        self.label.setText(self.lineEdit.text())
+        self.dir = None
+
+    def on_browse_clicked(self):
+        self.folder_path = QFileDialog.getExistingDirectory(self, 'Select a folder')
+        if self.folder_path:
+            self.pathLineEdit.setText(str(self.folder_path))
+
+    def on_build_clicked(self):
+        self.folder_path = str(self.pathLineEdit.text())
+        print(self.folder_path)
+        try:
+            # modeling.build(self.folder_path)
+            self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
+            self.queryBtn.setEnabled(True)
+        except:
+            QMessageBox.critical(self, "Error", "Wrong path", QMessageBox.Ok)
+
+    def on_query_clicked(self):
+        query = str(self.queryLineEdit.text())
+        count = self.numberSpinBox.value()
+        # modeling.query(query, count)
+
+        results = [name for name in self.names if name.find(query) >= 0]
+        self.resultslistWidget.clear()
+        self.resultslistWidget.addItems(results[0:min(len(results), count)])
 
 app = QApplication(sys.argv)
 w = MainWindow()
