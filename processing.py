@@ -2,13 +2,18 @@ from nltk.corpus import PlaintextCorpusReader
 from nltk.corpus import swadesh
 from nltk.corpus import stopwords
 import nltk
+import os
 
 # Procesa un fichero txt/pdf
 def process(path, language=None):
     terms = []
-    corpus = PlaintextCorpusReader(path, '.*')
 
-    print(corpus.words('10'))
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith('.pdf'):
+                os.system("pdftotext " + str(os.path.join(root, file) + " " + str(os.path.join(root, file)[:-4]) + ".txt"))
+
+    corpus = PlaintextCorpusReader(path, '.*\.txt')
 
     if not language:
         language = identify_language(corpus)
@@ -16,46 +21,53 @@ def process(path, language=None):
     if not language:
         return None, 'No fue posible detectar el idioma del corpus'
 
-    if language == 'spanish':
-        stopwordlist = stopwords.words('english')
-    elif language == 'english':
-        stopwordlist = stopwords.words('spanish')
-
     print(language)
+
+    stopwordlist = stopwords.words(language)
 
     documents = {}
 
     for c in corpus.fileids():
-        documents[c] = [w for w in corpus.words(c) if w not in stopwordlist]
-        documents[c] = nltk
+        stemmer = nltk.SnowballStemmer(language)
+        documents[c] = [stemmer.stem(w) for w in corpus.words(c) if w not in stopwordlist]
 
-    # terms = nltk.stemming(terms)
-    return terms
+    return documents
+
+
+language_dic = {'english': 'en', 'spanish': 'es', 'german': 'de', 'french': 'fr', 'italian': 'it', 'portuguese': 'pt'}
 
 
 def identify_language(corpus):
-    english_words = swadesh.words('en')
-    spanish_words = swadesh.words('es')
+    s_ratio = stopwords_ratio(corpus)
+    c_ratio = common_words_ratio(corpus)
 
-    english_count = 0
-    spanish_count = 0
-
-    for c in corpus.fileids():
-        text = corpus.words(c)
-        freq = nltk.FreqDist(text)
-
-        for key in freq:
-            if key.lower() in english_words:
-                english_count += freq[key]
-            if key.lower() in spanish_words:
-                spanish_count += freq[key]
-
-    if english_count > spanish_count:
-        return 'english'
-    else:
-        return 'spanish'
+    return max([(s_ratio[l] + c_ratio[l], l) for l in language_dic])[1]
 
 
+def stopwords_ratio(corpus):
+    ratio = {}
+
+    for language in language_dic:
+        ratio[language] = 0
+        for c in corpus.fileids():
+            stopwords_set = set(stopwords.words(language))
+            word_set = set(corpus.words(c))
+            ratio[language] += len(stopwords_set.intersection(word_set))
+
+    return ratio
+
+
+def common_words_ratio(corpus):
+    ratio = {}
+
+    for language, value in language_dic.items():
+        ratio[language] = 0
+        for c in corpus.fileids():
+            swadesh_set = set(swadesh.words(value))
+            word_set = set(corpus.words(c))
+            ratio[language] += len(swadesh_set.intersection(word_set))
+
+    return ratio
 
 
 def unusual_words(text):
