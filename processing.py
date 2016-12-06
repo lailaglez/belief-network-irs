@@ -4,6 +4,7 @@ from nltk.corpus import stopwords
 import nltk
 import os
 
+
 # Procesa un fichero txt/pdf
 def process(path, language=None):
     terms = []
@@ -31,6 +32,7 @@ def process(path, language=None):
         stemmer = nltk.SnowballStemmer(language)
         documents[c] = [stemmer.stem(w) for w in corpus.words(c) if w not in stopwordlist]
 
+    # Retorna un diccionario {nombre del documento: lista de palabras en el documento}
     return documents
 
 
