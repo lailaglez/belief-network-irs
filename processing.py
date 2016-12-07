@@ -7,8 +7,6 @@ import os
 
 # Procesa un fichero txt/pdf
 def process(path, language=None):
-    terms = []
-
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith('.pdf'):
@@ -77,6 +75,3 @@ def unusual_words(text):
     english_vocab = set(w.lower() for w in nltk.corpus.words.words())
     unusual = text_vocab.difference(english_vocab)
     return sorted(unusual)
-
-
-print(process('/home/laila/Documents/texts/'))
