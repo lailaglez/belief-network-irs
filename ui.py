@@ -40,9 +40,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.resultslistWidget.clear()
         self.resultslistWidget.addItems(results[0:min(len(results), count)])
 
-app = QApplication(sys.argv)
-w = MainWindow()
-w.show()
-app.exec_()
-
-
+if __name__ == '__main__':
+	app = QApplication(sys.argv)
+	w = MainWindow()
+	w.show()
+	app.exec_()
