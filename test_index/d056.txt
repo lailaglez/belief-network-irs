@@ -7,3 +7,5 @@ services at the division of technical information
 extension which are by-products of work already being
 performed .  these services are made possible by the use
 of punched tape typewriters and a computer .
+
+D. D. DAVIS

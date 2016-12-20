@@ -6,3 +6,5 @@ a centralized processing system for rapid
 science and technology is described .  this system
  uses advanced computer and journal preparation techniques
 for both information searches and abstract publication.
+
+C. L. ROTHGEB

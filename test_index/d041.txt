@@ -5,3 +5,5 @@ research within euratomcetis refers
  method, and automatic classification on the basis of statistical
 evaluation by comparison of text with hierarchically
 organized keyword lists .
+
+G. LUSTIG

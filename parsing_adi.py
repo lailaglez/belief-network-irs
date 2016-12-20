@@ -30,7 +30,8 @@ def read_doc(f):
 def create_doc(data, out_folder, name):
     with open(out_folder + os.sep + name, 'w') as f:
         f.write(data["title"] + "\n")
-        f.write(data["content"])
+        f.write(data["content"] + "\n")
+        f.write(data["authors"])
 
 
 def parse(s, out_folder):

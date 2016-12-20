@@ -6,3 +6,5 @@ the relationship between subject-matter
 is explained for treating descriptors with two levels
 of importance and for their built-in roles and links,
  through thesaurus usage and coding techniques .
+
+J. H. HEALD

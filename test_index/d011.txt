@@ -10,3 +10,5 @@ listing of subscriptions to journals .  implementation
  was accomplished by phases over a four year period .  this
  paper describes the organization of mechanized systems and
  results to date .
+
+L. I. CHASEN

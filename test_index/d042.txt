@@ -7,3 +7,6 @@ from the off-line operation of a computer .  character
  and command codes are read at high speed from magnetic
  tape; processed in a control console, and then are used to
  initiate the projection of characters onto film .
+
+R. G. CROCKETT
+W. W. YOUDEN

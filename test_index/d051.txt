@@ -5,3 +5,5 @@ on proper communication between librarians and computer experts .
 an appreciation of the problems of libraries as well as the
 potentialities of computers will result in suitable data processing
 and control systems .
+
+E. M. MCCORMICK

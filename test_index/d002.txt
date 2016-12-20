@@ -8,3 +8,6 @@ applications include the matching of chemical
 extracted from documents and search requests, and
  the matching of document identifications consisting of twodimensional
 graphs with query identifications .
+
+G. SALTON
+E. H. SUSSENGUTH, JR .

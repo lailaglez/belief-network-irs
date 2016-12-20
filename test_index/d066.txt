@@ -7,3 +7,5 @@ based on a comparison of : 1. existing systems;
 computer systems .  programing sophistication and
  machine configuration can change this relationship only in
  degree .
+
+R. E. SWID

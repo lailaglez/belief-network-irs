@@ -7,3 +7,5 @@ remote interrogation is defined .  remote
  media .  analog and digital transmission means, the hardcopy
 dilemma, and interrogation modes are discussed, and
  the input problem is highlighted .
+
+H. OHLMAN

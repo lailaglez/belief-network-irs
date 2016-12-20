@@ -7,3 +7,4 @@ oriented automatic photo copy setting, produces copy
 is limited to a punched paper tape application and
  does not cover aspects of a more sophisticated computer
  system.
+

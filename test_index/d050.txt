@@ -7,3 +7,6 @@ which translates any sentence of the set into a notation for
 mathematical logic .  objectives, accomplishments, and
 problems in the construction of such languages in project
 logos are discussed .
+
+H. G. BOHNERT
+T. J. WATSON

@@ -6,3 +6,5 @@ and its influence on total system design . tests
  planned to evaluate indexing both as a variable and as a
  source of variation will hopefully lead to more realistic appraisals
 of comparative system performance .
+
+A. J. GOLDWYN

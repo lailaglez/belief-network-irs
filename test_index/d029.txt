@@ -8,3 +8,5 @@ the concept of using a statistical image
  the transformation to classical integral geometry, and construction
 of a prototype analog statistical image transformation
 generator .
+
+G. TENERY

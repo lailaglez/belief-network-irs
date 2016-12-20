@@ -6,3 +6,5 @@ to file organization and search is presented .  the
  the relation of processing effort to request predictability
  determine file organization .  desired results and allowable
  processing effort determine the search rules .
+
+R. M. SHOFFNER

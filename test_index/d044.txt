@@ -9,3 +9,5 @@ experiments are being performed to test the
 faster than with a typewriter console, and that the immediate
  display response is very useful when several sequential editing
 steps are needed in a local area of text .
+
+L. F. BUCKLAND

@@ -8,3 +8,5 @@ cynthia iii is a scientific demonstrator
  the recognition of any phoneme, accents, and speaker, the
  machine has recognized seismic signals which cannot be
  separated by any other known method .
+
+A. LESTI

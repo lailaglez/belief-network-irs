@@ -11,3 +11,5 @@ all 800 documents encoded, high school educated
  encoders .  eliminating documents for which no notifications
 were sent, no significant difference was found between
 the high school and college level encoders .
+
+A. RESNICK

@@ -8,3 +8,5 @@ of references from chemical titles has been developed.
 names, journal reference codes, non-initial morphemes
  and stems, and both subjectively and statistically-determined
 relevance .
+
+R. R. FREEMAN

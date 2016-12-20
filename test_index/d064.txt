@@ -7,3 +7,5 @@ of entire documents and the retrieval of selected
 procedures for segmenting documents into independently
 retrievable segments and assigning index terms
  to these segments are presented .
+
+S. N. JACOBSON

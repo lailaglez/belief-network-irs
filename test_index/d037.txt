@@ -8,3 +8,5 @@ evolved to produce what is now called an sdi-4 system .  the
  economical fashion, current information to those individuals
 within the ibm company who have a need for that
  information .
+
+A. RESNICK

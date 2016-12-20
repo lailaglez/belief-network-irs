@@ -6,3 +6,5 @@ a magnetic reading station is accomplished with the aid of track
 switches and electronic logic capable of operating at a 10
 megacycle rate .  the photographic code strips are read in a single
 wide channel reading head .
+
+B. O-BRIAN
