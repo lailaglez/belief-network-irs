@@ -16,6 +16,7 @@ def read_block(f):
 def read_doc(f):
     doc = {"title": "", "authors": "", "content": ""}
 
+
     line = f.readline()
     while line and not line.startswith(".I"):
         if line.startswith(".T"):
@@ -34,7 +35,7 @@ def create_doc(data, out_folder, name):
         f.write(data["authors"])
 
 
-def parse(s, out_folder):
+def parse_all(s, out_folder):
     with open(s) as f:
         line = f.readline()  # .I
         while line:
@@ -47,8 +48,8 @@ def parse(s, out_folder):
             create_doc(doc, out_folder, doc_name)
             print("**********************************")
 
+if __name__ == '__main__':
+    s = "adi" + os.sep + "ADI.ALL"
+    out_folder = "test_index"
 
-s = "adi" + os.sep + "ADI.ALL"
-out_folder = "test_index"
-
-parse(s, out_folder)
+    parse_all(s, out_folder)
