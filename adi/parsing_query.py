@@ -34,11 +34,12 @@ def parse_rel(qry, rel):
         # pprint.pprint(d)
     return d, d_qry
 
-qry = "ADI.QRY"
-rel = "ADI.REL"
-d, d_qry = parse_rel(qry, rel)
+if __name__ == '__main__':
+    qry = "ADI.QRY"
+    rel = "ADI.REL"
+    d, d_qry = parse_rel(qry, rel)
 
-s = json.dumps(d)
+    s = json.dumps(d)
 
-with open('..' + os.sep + 'test_index' + os.sep + 'results.json', 'w') as f:
-    f.write(s)
+    with open('..' + os.sep + 'test_index' + os.sep + 'results.json', 'w') as f:
+        f.write(s)
