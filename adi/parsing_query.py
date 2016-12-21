@@ -39,6 +39,6 @@ rel = "ADI.REL"
 d, d_qry = parse_rel(qry, rel)
 
 s = json.dumps(d)
-print(s)
-with open('..' + os.sep + 'test_index' + os.sep + 'results.txt', 'w') as f:
+
+with open('..' + os.sep + 'test_index' + os.sep + 'results.json', 'w') as f:
     f.write(s)
