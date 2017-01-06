@@ -7,12 +7,14 @@ import pprint
 test_folder = "test_index"
 
 
-def load_results():
+def load_results(folder_path, query):
+    path = os.path.join(folder_path, 'results.json')
     try:
-        with open(test_folder + os.sep + 'results.json') as f:
-            return json.loads(f.read())
+        with open(path) as f:
+            dic = json.loads(f.read())
+            return dic[query.lower()]
     except:
-        print("something was wrong, make sure that exists a file named \'results.json\' with the correct format in the test folder")
+        return None
 
 
 def report():

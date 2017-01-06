@@ -5,6 +5,7 @@ import pprint
 import json
 from adi.parsing_adi import read_block
 
+
 def parse_query(s):
     d = {}
     with open(s) as f:
@@ -13,9 +14,14 @@ def parse_query(s):
             query_number = int(line.strip().split()[-1])
             f.readline()
             query, line = read_block(f)
-            d[query_number] = query
+            query = query.replace('?', '')
+            query = query.replace('.', '')
+            query = query.replace(',', '')
+            query = query.replace('\n', '')
+            d[query_number] = query.lower()
 
     return d
+
 
 def parse_rel(qry, rel):
     d_qry = parse_query(qry)
@@ -25,14 +31,15 @@ def parse_rel(qry, rel):
     with open(rel) as f:
         for line in f.readlines():
             numbers = line.strip().split()
-            q, doc_name = int(numbers[0]), "d%03d.txt" %(int(numbers[1]))
+            q, doc_name = int(numbers[0]), "d%03d.txt" % (int(numbers[1]))
             text_query = d_qry[q]
             if text_query not in d:
                 d[text_query] = []
             d[text_query].append(doc_name)
 
-        # pprint.pprint(d)
+            # pprint.pprint(d)
     return d, d_qry
+
 
 if __name__ == '__main__':
     qry = "ADI.QRY"
