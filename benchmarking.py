@@ -2,23 +2,23 @@ __author__ = 'Jose Gabriel'
 
 import os
 import json
+import sys
 import pprint
 
-test_folder = "test_index"
 
-
-def load_results():
+def load_results(test_folder):
     try:
         with open(test_folder + os.sep + 'results.json') as f:
             return json.loads(f.read())
     except:
-        print("something was wrong, make sure that exists a file named \'results.json\' with the correct format in the test folder")
+        print(
+            "something was wrong, make sure that exists a file named \'results.json\' with the correct format in the test folder")
 
 
-def report():
-    d = load_results()
+def report(test_folder):
+    d = load_results(test_folder)
     for query, docs in d.items():
-        model_docs = [] # model_docs debe ser la lista de documentos devueltos por nuestro modelo dada la consulta 'query'
+        model_docs = []  # model_docs debe ser la lista de documentos devueltos por nuestro modelo dada la consulta 'query'
         print("-----------------------QUERY------------------------")
         print(query)
         print("---------DOCUMETOS QUE DEBEN SER RECUPERADOS--------")
@@ -29,4 +29,5 @@ def report():
 
 
 if __name__ == '__main__':
-    report()
+    test_folder = sys.argv[-1]
+    report(test_folder)
