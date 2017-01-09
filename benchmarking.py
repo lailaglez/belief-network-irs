@@ -2,6 +2,7 @@ __author__ = 'Jose Gabriel'
 
 import os
 import json
+import sys
 import pprint
 
 test_folder = "test_index"
