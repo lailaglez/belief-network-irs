@@ -41,7 +41,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.queryBtn.setEnabled(True)
 
             language = self.languagesCB.currentText()
-
             self.belief_network.build(self.folder_path, language)
             self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
         except:

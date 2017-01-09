@@ -134,6 +134,9 @@
            <height>42</height>
           </size>
          </property>
+         <property name="documentTitle">
+          <string/>
+         </property>
          <property name="readOnly">
           <bool>false</bool>
          </property>

@@ -77,6 +77,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.expandQueryChB, 1, 3, 1, 1)
         self.queryLineEdit = QtGui.QTextEdit(self.groupBox_2)
         self.queryLineEdit.setMaximumSize(QtCore.QSize(16777215, 42))
+        self.queryLineEdit.setDocumentTitle(_fromUtf8(""))
         self.queryLineEdit.setReadOnly(False)
         self.queryLineEdit.setObjectName(_fromUtf8("queryLineEdit"))
         self.gridLayout.addWidget(self.queryLineEdit, 0, 0, 1, 4)
