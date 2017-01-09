@@ -5,6 +5,8 @@ import os
 import parsing_documents
 import parsing_query
 
+# python build_index_folder.py all=path.all qry=path.qry rel=path.rel out_folder=folder_path
+
 if __name__ == '__main__':
     out_folder, docs, qry, rel = "", "", "", ""
     if len(sys.argv) == 0 or len(sys.argv) == 1:
