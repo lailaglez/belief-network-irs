@@ -1,4 +1,5 @@
 import processing
+import indexing
 import math
 
 
@@ -113,10 +114,10 @@ class BeliefNetwork():
         documents, self.language = processing.process(path, language)
         if documents is None:
             return False, self.language
-        # create index
         self.documents = [d for d in documents]
         self.N = len(self.documents)
         self.Dictionary = {}
+        self.VM = VectorModel(self.Dictionary, self.N)
         for d, v in documents.items():
             for t in v:
                 if t not in self.Dictionary:
@@ -124,6 +125,8 @@ class BeliefNetwork():
                 if d not in self.Dictionary[t]:
                     self.Dictionary[t][d] = 0
                 self.Dictionary[t][d] += 1
+        self.keys = self.Dictionary.keys()
+        self.weights = indexing.create(self.keys, self.documents, self.VM)
         return True, self.language
 
     # Este método realiza la query usando el índice generado
@@ -135,14 +138,13 @@ class BeliefNetwork():
         return documents, q
 
     def P_dj_q(self, dj, q):
-        vm = VectorModel(self.Dictionary, self.N)
         # Pk = math.log((0.5) ** (len(self.Dictionary)))
         Pk = 1
         S = 0
         for ki in q:
             if ki in self.Dictionary and dj in self.Dictionary[ki]:
-                Pqk = vm.Wq(ki, q) / math.sqrt(sum([vm.Wq(kj, q) ** 2 for kj in self.Dictionary]))
-                Pdk = vm.W(ki, dj) / math.sqrt(sum([vm.W(kj, dj) ** 2 for kj in self.Dictionary]))
+                Pqk = self.VM.Wq(ki, q) / math.sqrt(sum([self.VM.Wq(kj, q) ** 2 for kj in self.Dictionary]))
+                Pdk = self.weights[ki][dj] / math.sqrt(sum([self.weights[kj][dj] ** 2 for kj in self.Dictionary]))
                 if Pqk == 0 or Pdk == 0 or Pk == 0:
                     S += 0
                 else:
@@ -152,9 +154,6 @@ class BeliefNetwork():
 
     def Rank(self, q):
         documents = {}
-        keys = self.documents
-        keys.sort()
-        # for dj in self.documents:
-        for dj in keys:
+        for dj in self.documents:
             documents[dj] = self.P_dj_q(dj, q)
         return documents
