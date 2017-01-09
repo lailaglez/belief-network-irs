@@ -48,7 +48,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.critical(self, "Error", "Wrong path", QMessageBox.Ok)
 
     def on_query_clicked(self):
-        query = str(self.queryLineEdit.text())
+        query = str(self.queryLineEdit.toPlainText())
         count = self.numberSpinBox.value()
 
         expand_query = self.expandQueryChB.isChecked()
