@@ -53,26 +53,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QMessageBox.critical(self, "Error", "Wrong path", QMessageBox.Ok)
 
     def on_query_clicked(self):
-        # query = str(self.queryLineEdit.toPlainText())
-        # count = self.numberSpinBox.value()
-        #
-        # expand_query = self.expandQueryChB.isChecked()
-        # results, expanded_query = self.belief_network.query(query, expand_query)
-        # self.expandedLineEdit.setText(" ".join(expanded_query))
-        # results = results[:min(len(results), count)]
-        #
-        # relevant = benchmarking.load_results(self.folder_path, query)
-        # retrieved = [r[0] for r in results]
-        #
-        # if relevant:
-        #     eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=retrieved)
-        #     self.statisticslistWidget.clear()
-        #     self.statisticslistWidget.addItems([str(k) + ': ' + str(v) for k, v in eval.items()])
-        #
-        # self.resultslistWidget.clear()
-        # self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
+        query = str(self.queryLineEdit.toPlainText())
+        count = self.numberSpinBox.value()
 
-        self.resultslistWidget.addItems(["d001.txt","d002.txt"])
+        expand_query = self.expandQueryChB.isChecked()
+        results, expanded_query = self.belief_network.query(query, expand_query)
+        self.expandedLineEdit.setText(" ".join(expanded_query))
+        results = results[:min(len(results), count)]
+
+        relevant = benchmarking.load_results(self.folder_path, query)
+        retrieved = [r[0] for r in results]
+
+        if relevant:
+            eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=retrieved)
+            self.statisticslistWidget.clear()
+            self.statisticslistWidget.addItems([str(k) + ': ' + str(v) for k, v in eval.items()])
+
+        self.resultslistWidget.clear()
+        self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
+
+        # self.resultslistWidget.addItems(["d001.txt","d002.txt"])
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
