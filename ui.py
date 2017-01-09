@@ -53,7 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         expand_query = self.expandQueryChB.isChecked()
         results, expanded_query = self.belief_network.query(query, expand_query)
-        self.expandedLineEdit.setText(expanded_query)
+        self.expandedLineEdit.setText(" ".join(expanded_query))
         results = results[:min(len(results), count)]
 
         relevant = benchmarking.load_results(self.folder_path, query)
