@@ -29,7 +29,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.folder_path = str(self.pathLineEdit.text())
         try:
             self.queryBtn.setEnabled(True)
-            self.belief_network.build(self.folder_path)
+
+            # TODO poner un combobox con los idiomas en processing.languages_available + (inferir None) y asignarselo a la variable
+            language = 'english'
+
+            self.belief_network.build(self.folder_path, language)
             self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
         except:
             QMessageBox.critical(self, "Error", "Wrong path", QMessageBox.Ok)
@@ -37,17 +41,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_query_clicked(self):
         query = str(self.queryLineEdit.text())
         count = self.numberSpinBox.value()
-        results = self.belief_network.query(query)
+
+        #TODO Poner valor de checkbox
+        expand_query = False
+
+        #TODO Poner expanded_query en un label
+        results, expanded_query = self.belief_network.query(query, expand_query)
+        results = results[:min(len(results), count)]
 
         relevant = benchmarking.load_results(self.folder_path, query)
 
         if relevant:
-            evaluating.evaluate(relevant_documents=relevant, retrieved_documents=results)
+            eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=results)
             self.statisticslistWidget.clear()
-            self.statisticslistWidget.addItems([str(k) + ': ' + str(v) for k, v in relevant.items()])
+            self.statisticslistWidget.addItems([str(k) + ': ' + str(v) for k, v in eval.items()])
 
         self.resultslistWidget.clear()
-        self.resultslistWidget.addItems(results[:min(len(results), count)])
+        self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

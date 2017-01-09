@@ -6,6 +6,9 @@ import nltk
 import os
 
 
+language_dic = {'english': 'en', 'spanish': 'es', 'german': 'de', 'french': 'fr', 'italian': 'it', 'portuguese': 'pt'}
+languages_available = language_dic.keys()
+
 # Procesa un fichero txt/pdf
 def process(path, language=None):
     for root, dirs, files in os.walk(path):
@@ -36,16 +39,6 @@ def process(path, language=None):
     # Retorna un diccionario {nombre del documento: lista de términos en el documento}
     # y una lista con los términos de la query procesada
     return documents, language
-
-
-language_dic = {'english': 'en', 'spanish': 'es', 'german': 'de', 'french': 'fr', 'italian': 'it', 'portuguese': 'pt'}
-
-
-def process_query(query, language):
-    stemmer = nltk.SnowballStemmer(language)
-    stopwordlist = stopwords.words(language)
-    query = [stemmer.stem(q) for q in query if q not in stopwordlist]
-    return process_query(query)
 
 
 def identify_language(corpus):
@@ -82,17 +75,20 @@ def common_words_ratio(corpus):
 
 
 def process_query(query, language):
-    result = query.split()
+    query = query.split()
+    result = query.copy()
 
-    for q in result:
+    for q in query:
         ss = wordnet.synsets(q)
         if len(ss) == 1:
-            result += [l.name() for l in ss[0].lemmas()]
+            for l in ss[0].lemmas():
+                result.extend(l.name().split('_'))
 
     stemmer = nltk.SnowballStemmer(language)
     stopwordlist = stopwords.words(language)
 
     return [stemmer.stem(w) for w in result if w not in stopwordlist]
+
 
 def unusual_words(text):
     text_vocab = set(w.lower() for w in text if w.isalpha())

@@ -100,8 +100,8 @@ class BeliefNetwork():
     docs -> Number of documents in database
     """
 
-    def build(self, path):
-        documents, self.language = processing.process(path)
+    def build(self, path, language):
+        documents, self.language = processing.process(path, language)
         if documents is None:
             return False, self.language
         # create index
@@ -118,12 +118,12 @@ class BeliefNetwork():
         return True, self.language
 
     # Este método realiza la query usando el índice generado
-    def query(self, query):
-        q = processing.process_query(query, self.language)
+    def query(self, query, expand_query):
+        q = processing.process_query(query, self.language) if expand_query else query
         rank = self.Rank(q)
-        documents = [k for k, v in rank.items() if v > 0]
-        documents.sort(key=lambda k: rank[k])
-        return documents
+        documents = [(k, v) for k, v in rank.items() if v > 0]
+        documents.sort(key=lambda t: t[1])
+        return documents, q
 
     def P_dj_q(self, dj, q):
         vm = VectorModel(self.Dictionary, self.N)

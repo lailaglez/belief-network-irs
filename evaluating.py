@@ -1,3 +1,6 @@
+import math
+
+
 def evaluate(relevant_documents, retrieved_documents):
     relevant_documents = set(relevant_documents)
     retrieved_documents = set(retrieved_documents)
@@ -26,10 +29,14 @@ def r_precision(relevant_documents, retrieved_documents, r):
 def f_measure(relevant_documents, retrieved_documents):
     p = precision(relevant_documents, retrieved_documents)
     r = recall(relevant_documents, retrieved_documents)
+    if p + r == 0:
+        return math.inf
     return 2 * p * r / (p + r)
 
 
 def e_measure(relevant_documents, retrieved_documents, beta=1):
     p = precision(relevant_documents, retrieved_documents)
     r = recall(relevant_documents, retrieved_documents)
+    if p + r == 0:
+        return math.inf
     return (1 + beta ** 2) * p * r / (beta ** 2 * p + r)
