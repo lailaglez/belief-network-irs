@@ -2,8 +2,9 @@ __author__ = 'Jose Gabriel'
 
 import json
 import os
-
-from parsing_documents import read_block
+import pprint
+import json
+from adi.parsing_adi import read_block
 
 
 def parse_query(s):
@@ -16,8 +17,11 @@ def parse_query(s):
             query_number = i #int(line.strip().split()[-1])
             f.readline()
             query, line = read_block(f)
-            d[query_number] = query
-            i += 1
+            query = query.replace('?', '')
+            query = query.replace('.', '')
+            query = query.replace(',', '')
+            query = query.replace('\n', '')
+            d[query_number] = query.lower()
 
     return d
 

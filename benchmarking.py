@@ -5,20 +5,23 @@ import json
 import sys
 import pprint
 
+test_folder = "test_index"
 
-def load_results(test_folder):
+
+def load_results(folder_path, query):
+    path = os.path.join(folder_path, 'results.json')
     try:
-        with open(test_folder + os.sep + 'results.json') as f:
-            return json.loads(f.read())
+        with open(path) as f:
+            dic = json.loads(f.read())
+            return dic[query.lower()]
     except:
-        print(
-            "something was wrong, make sure that exists a file named \'results.json\' with the correct format in the test folder")
+        return None
 
 
-def report(test_folder):
-    d = load_results(test_folder)
+def report():
+    d = load_results()
     for query, docs in d.items():
-        model_docs = []  # model_docs debe ser la lista de documentos devueltos por nuestro modelo dada la consulta 'query'
+        model_docs = [] # model_docs debe ser la lista de documentos devueltos por nuestro modelo dada la consulta 'query'
         print("-----------------------QUERY------------------------")
         print(query)
         print("---------DOCUMETOS QUE DEBEN SER RECUPERADOS--------")
@@ -29,5 +32,4 @@ def report(test_folder):
 
 
 if __name__ == '__main__':
-    test_folder = sys.argv[-1]
-    report(test_folder)
+    report()

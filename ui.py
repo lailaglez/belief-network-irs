@@ -1,8 +1,10 @@
-import os
-from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-import sys
 from UI.main import Ui_MainWindow
+from modeling import BeliefNetwork
+import evaluating
+import benchmarking
+import sys
+import os
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -16,6 +18,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.dir = None
 
+        self.belief_network = BeliefNetwork()
+
     def on_browse_clicked(self):
         self.folder_path = QFileDialog.getExistingDirectory(self, 'Select a folder')
         if self.folder_path:
@@ -23,22 +27,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def on_build_clicked(self):
         self.folder_path = str(self.pathLineEdit.text())
-        print(self.folder_path)
         try:
-            # modeling.build(self.folder_path)
-            self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
             self.queryBtn.setEnabled(True)
+            self.belief_network.build(self.folder_path)
+            self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
         except:
             QMessageBox.critical(self, "Error", "Wrong path", QMessageBox.Ok)
 
     def on_query_clicked(self):
         query = str(self.queryLineEdit.text())
         count = self.numberSpinBox.value()
-        # modeling.query(query, count)
+        results = self.belief_network.query(query)
 
-        results = [name for name in self.names if name.find(query) >= 0]
+        relevant = benchmarking.load_results(self.folder_path, query)
+
+        if relevant:
+            evaluating.evaluate(relevant_documents=relevant, retrieved_documents=results)
+            self.statisticslistWidget.clear()
+            self.statisticslistWidget.addItems([str(k) + ': ' + str(v) for k, v in relevant.items()])
+
         self.resultslistWidget.clear()
-        self.resultslistWidget.addItems(results[0:min(len(results), count)])
+        self.resultslistWidget.addItems(results[:min(len(results), count)])
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

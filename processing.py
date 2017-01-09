@@ -7,7 +7,7 @@ import os
 
 
 # Procesa un fichero txt/pdf
-def process(path, query, language=None):
+def process(path, language=None):
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith('.pdf'):
@@ -21,25 +21,31 @@ def process(path, query, language=None):
     if not language:
         return None, 'No fue posible detectar el idioma del corpus'
 
-    print(language)
-
     stopwordlist = stopwords.words(language)
+    punctuation = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_',
+                   '=', '+', '{', '}', '[', ']', ';', ';', ':', '"', "'", ',', '.', '<', '>', '?', '/']
 
     documents = {}
+    stemmer = nltk.SnowballStemmer(language)
 
     for c in corpus.fileids():
-        stemmer = nltk.SnowballStemmer(language)
-        documents[c] = [stemmer.stem(w) for w in corpus.words(c) if w not in stopwordlist]
-
-    query = [stemmer.stem(q) for q in query if q not in stopwordlist]
-    query = process_query(query)
+        documents[c] = [stemmer.stem(w) for w in corpus.words(c) if w not in stopwordlist and w not in punctuation]
+        title = c[:-4].split()
+        documents[c].extend([stemmer.stem(w) for w in title])
 
     # Retorna un diccionario {nombre del documento: lista de términos en el documento}
     # y una lista con los términos de la query procesada
-    return documents, query
+    return documents, language
 
 
 language_dic = {'english': 'en', 'spanish': 'es', 'german': 'de', 'french': 'fr', 'italian': 'it', 'portuguese': 'pt'}
+
+
+def process_query(query, language):
+    stemmer = nltk.SnowballStemmer(language)
+    stopwordlist = stopwords.words(language)
+    query = [stemmer.stem(q) for q in query if q not in stopwordlist]
+    return process_query(query)
 
 
 def identify_language(corpus):
@@ -54,8 +60,8 @@ def stopwords_ratio(corpus):
 
     for language in language_dic:
         ratio[language] = 0
+        stopwords_set = set(stopwords.words(language))
         for c in corpus.fileids():
-            stopwords_set = set(stopwords.words(language))
             word_set = set(corpus.words(c))
             ratio[language] += len(stopwords_set.intersection(word_set))
 
@@ -75,16 +81,18 @@ def common_words_ratio(corpus):
     return ratio
 
 
-def process_query(query):
-    result = list(query)
+def process_query(query, language):
+    result = query.split()
 
-    for q in query:
+    for q in result:
         ss = wordnet.synsets(q)
         if len(ss) == 1:
             result += [l.name() for l in ss[0].lemmas()]
 
-    return list(set(result))
+    stemmer = nltk.SnowballStemmer(language)
+    stopwordlist = stopwords.words(language)
 
+    return [stemmer.stem(w) for w in result if w not in stopwordlist]
 
 def unusual_words(text):
     text_vocab = set(w.lower() for w in text if w.isalpha())
