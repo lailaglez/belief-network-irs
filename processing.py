@@ -74,15 +74,16 @@ def common_words_ratio(corpus):
     return ratio
 
 
-def process_query(query, language):
+def process_query(query, language, expand_query):
     query = query.split()
     result = query.copy()
 
-    for q in query:
-        ss = wordnet.synsets(q)
-        if len(ss) == 1:
-            for l in ss[0].lemmas():
-                result.extend(l.name().split('_'))
+    if expand_query:
+        for q in query:
+            ss = wordnet.synsets(q)
+            if len(ss) == 1:
+                for l in ss[0].lemmas():
+                    result.extend(l.name().split('_'))
 
     stemmer = nltk.SnowballStemmer(language)
     stopwordlist = stopwords.words(language)

@@ -34,10 +34,10 @@ class VectorModel():
     """
 
     def F(self, Ki, Dj):
-        max_term, max_freq = self.MaxL(Dj)
-        if max_freq is 0:
+        mod = self.modDj(Dj)
+        if mod == 0:
             return 0
-        return float(self.Freq(Ki, Dj)) / float(max_freq)
+        return float(self.Freq(Ki, Dj)) / float(mod)
 
     """
     maximum over all terms which are mentioned in the text of the document dj
@@ -55,21 +55,26 @@ class VectorModel():
     """
 
     def idf(self, Ki):
-        return math.log(float(self.N) / float(self.Ni(Ki)))
+        return math.log(float(self.N) / float(self.Ni(Ki)), 10)
 
     """
     Weight of term ki in the document Dj
     """
 
     def W(self, Ki, Dj):
-        return self.F(Ki, Dj) * self.idf(Ki)
+        F = self.F(Ki, Dj)
+        idf = self.idf(Ki)
+        # if F == 0 or idf == 0:
+        #	return 0.0
+        # return (math.log(F) + math.log(idf)) * -1
+        return F * idf
 
     """
     Weight of term ki in the query q
     """
 
     def Wq(self, Ki, q):
-        return (0.5 + (0.5 * float(q.count(Ki)) / float(self.max_Fq(q)))) * self.idf(Ki)
+        return (0.5 + (0.5 * float(q.count(Ki)) / float(len(q)))) * self.idf(Ki)
 
     """
     max-frequency term in the query q
@@ -88,10 +93,14 @@ class VectorModel():
         return (Wkij * Wkiq) / (math.sqrt(Wkij ** 2) * math.sqrt(Wkiq ** 2))
 
     def modDj(self, Dj):
-        pass
+        count = 0
+        for ki in self.Dictionary:
+            if Dj in self.Dictionary[ki]:
+                count += self.Dictionary[ki][Dj]
+        return count
 
     def F2(self, Ki, Dj):
-        return self.Freq(self, Ki, Dj) / self.modDj(self, Dj)
+        return Freq(self, Ki, Dj) / modDj(self, Dj)
 
 
 class BeliefNetwork():
@@ -119,7 +128,7 @@ class BeliefNetwork():
 
     # Este método realiza la query usando el índice generado
     def query(self, query, expand_query):
-        q = processing.process_query(query, self.language) if expand_query else query
+        q = processing.process_query(query, self.language, expand_query)
         rank = self.Rank(q)
         documents = [(k, v) for k, v in rank.items() if v > 0]
         documents.sort(key=lambda t: t[1])
@@ -127,14 +136,18 @@ class BeliefNetwork():
 
     def P_dj_q(self, dj, q):
         vm = VectorModel(self.Dictionary, self.N)
-        # Pk = (0.5) ** (len(self.Dictionary))
+        # Pk = math.log((0.5) ** (len(self.Dictionary)))
         Pk = 1
         S = 0
         for ki in q:
             if ki in self.Dictionary and dj in self.Dictionary[ki]:
                 Pqk = vm.Wq(ki, q) / math.sqrt(sum([vm.Wq(kj, q) ** 2 for kj in self.Dictionary]))
                 Pdk = vm.W(ki, dj) / math.sqrt(sum([vm.W(kj, dj) ** 2 for kj in self.Dictionary]))
-                S += Pqk * Pdk * Pk
+                if Pqk == 0 or Pdk == 0 or Pk == 0:
+                    S += 0
+                else:
+                    #S += Pqk + Pdk + Pk
+                    S += (math.log(Pqk)+math.log(Pdk)+math.log(Pk))
         return S
 
     def Rank(self, q):

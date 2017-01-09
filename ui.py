@@ -60,7 +60,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
 
 if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	w = MainWindow()
-	w.show()
-	app.exec_()
+    app = QApplication(sys.argv)
+    w = MainWindow()
+    w.show()
+    app.exec_()
