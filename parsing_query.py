@@ -4,7 +4,7 @@ import json
 import os
 import pprint
 import json
-from adi.parsing_adi import read_block
+from parsing_documents import read_block
 
 
 def parse_query(s):
@@ -22,6 +22,7 @@ def parse_query(s):
             query = query.replace(',', '')
             query = query.replace('\n', '')
             d[query_number] = query.lower()
+            i += 1
 
     return d
 
