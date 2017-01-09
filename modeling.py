@@ -131,7 +131,7 @@ class BeliefNetwork():
         q = processing.process_query(query, self.language, expand_query)
         rank = self.Rank(q)
         documents = [(k, v) for k, v in rank.items() if v > 0]
-        documents.sort(key=lambda t: t[1])
+        documents.sort(key=lambda t: t[1], reverse=True)
         return documents, q
 
     def P_dj_q(self, dj, q):
@@ -146,12 +146,15 @@ class BeliefNetwork():
                 if Pqk == 0 or Pdk == 0 or Pk == 0:
                     S += 0
                 else:
-                    #S += Pqk + Pdk + Pk
-                    S += (math.log(Pqk)+math.log(Pdk)+math.log(Pk))
+                    S += Pqk + Pdk + Pk
+                    #S += (math.log(Pqk)+math.log(Pdk)+math.log(Pk))
         return S
 
     def Rank(self, q):
         documents = {}
-        for dj in self.documents:
+        keys = self.documents
+        keys.sort()
+        # for dj in self.documents:
+        for dj in keys:
             documents[dj] = self.P_dj_q(dj, q)
         return documents

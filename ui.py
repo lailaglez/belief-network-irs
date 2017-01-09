@@ -50,9 +50,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         results = results[:min(len(results), count)]
 
         relevant = benchmarking.load_results(self.folder_path, query)
+        retrieved = [r[0] for r in results]
 
         if relevant:
-            eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=results)
+            eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=retrieved)
             self.statisticslistWidget.clear()
             self.statisticslistWidget.addItems([str(k) + ': ' + str(v) for k, v in eval.items()])
 
