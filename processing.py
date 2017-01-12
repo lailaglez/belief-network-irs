@@ -14,7 +14,11 @@ def process(path, language=None):
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith('.pdf'):
-                os.system("pdftotext " + str(os.path.join(root, file) + " " + str(os.path.join(root, file)[:-4]) + ".txt"))
+                os.system("pdftotext '" + str(os.path.join(root, file)) + "'")
+            if file.endswith('.html'):
+                os.system("html2text '" + str(os.path.join(root, file)) + "' > '" + str(os.path.join(root, file))[:-4] + "txt'")
+            if file.endswith('.docx'):
+                os.system("docx2txt '" + str(os.path.join(root, file)) + "'")
 
     corpus = PlaintextCorpusReader(path, '.*\.txt')
 
@@ -35,6 +39,13 @@ def process(path, language=None):
         documents[c] = [stemmer.stem(w) for w in corpus.words(c) if w not in stopwordlist and w not in punctuation]
         title = c[:-4].split()
         documents[c].extend([stemmer.stem(w) for w in title])
+
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith('.pdf'):
+                os.system("rm '" + str(os.path.join(root, file))[:-3] + "txt'")
+            if file.endswith('.html') or file.endswith('.docx'):
+                os.system("rm '" + str(os.path.join(root, file))[:-4] + "txt'")
 
     # Retorna un diccionario {nombre del documento: lista de términos en el documento}
     # y una lista con los términos de la query procesada
@@ -78,7 +89,7 @@ def process_query(query, language, expand_query):
     query = query.split()
     result = query.copy()
 
-    if expand_query:
+    if expand_query and language == 'english':
         for q in query:
             ss = wordnet.synsets(q)
             # if len(ss) == 1:
@@ -89,7 +100,6 @@ def process_query(query, language, expand_query):
                     result.extend(l.name().split('_'))
 
     stemmer = nltk.SnowballStemmer(language)
-
     stopwordlist = stopwords.words(language)
 
     return [stemmer.stem(w) for w in result if w not in stopwordlist]

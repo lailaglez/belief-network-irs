@@ -8,7 +8,7 @@ import math
 def f():
     bn = modeling.BeliefNetwork()
 
-    folder_path = '/media/laila/Storage/Escuela/5to Año/I Semestre/Sistemas de Información/Proyecto/test_index_adi'
+    folder_path = '/media/laila/Storage/Escuela/5to Año/I Semestre/Sistemas de Información/Proyecto/test_index_cran'
     bn.build(folder_path, 'english')
 
     path = os.path.join(folder_path, 'results.json')
@@ -22,13 +22,13 @@ def f():
         print(n)
         for k in dic:
             result, q = bn.query(k)
-            print(k)
-            print(q)
+            # print(k)
+            # print(q)
             result.sort(key=lambda t: t[1], reverse=True)
-            result = result[:10]
+            result = result[:50]
             relevant = dic[k]
-            print(relevant)
-            print([r[0] for r in result])
+            # print(relevant)
+            # print([r[0] for r in result])
             ev = evaluating.evaluate(relevant, [r[0] for r in result])
             p += ev['precision']
             r += ev['recall']
@@ -36,7 +36,8 @@ def f():
                 f += ev['f_measure']
             if ev['e_measure'] != math.inf:
                 e += ev['e_measure']
-            print('--------------------------------------------------')
+            # print(p)
+            # print('--------------------------------------------------')
         print(p/n)
         print(r/n)
         print(e/n)

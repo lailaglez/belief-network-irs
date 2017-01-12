@@ -7,7 +7,9 @@ def create(documents, dictionary, VM):
         for ki in dictionary[dj]:
             if ki not in d:
                 d[ki]= {}
-            d[ki][dj] = VM.Wq(ki, dj) / math.sqrt(sum([VM.Wq(kj, dj) ** 2 for kj in dictionary[dj]]))
+            d[ki][dj] = VM.Wq(ki, dj)
+            if d[ki][dj] != 0:
+                d[ki][dj] /= math.sqrt(sum([VM.Wq(kj, dj) ** 2 for kj in dictionary[dj]]))
     return d
 
 #

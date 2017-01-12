@@ -1,4 +1,6 @@
 import math
+import os
+import json
 
 
 def evaluate(relevant_documents, retrieved_documents):
@@ -46,3 +48,13 @@ def e_measure(relevant_documents, retrieved_documents, beta=1):
     if p + r == 0:
         return math.inf
     return (1 + beta ** 2) * p * r / (beta ** 2 * p + r)
+
+
+def load_results(folder_path, query):
+    path = os.path.join(folder_path, 'results.json')
+    try:
+        with open(path) as f:
+            dic = json.loads(f.read())
+            return dic[query.lower()]
+    except:
+        return None

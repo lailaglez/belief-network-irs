@@ -2,13 +2,10 @@ from PyQt4.QtGui import *
 from UI.main import Ui_MainWindow
 from modeling import BeliefNetwork
 import evaluating
-import benchmarking
 import sys
 import os
 import processing
 
-
-#TODO añadir checkbox index?
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -42,9 +39,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         try:
             self.queryBtn.setEnabled(True)
 
-            language = self.languagesCB.currentText()
+            language_combo_text = self.languagesCB.currentText()
+            language = language_combo_text if language_combo_text != 'infer' else None
 
-            self.belief_network.build(self.folder_path, language, index=True)
+            self.belief_network.build(self.folder_path, language)
             self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
         except:
             QMessageBox.critical(self, "Error", "Wrong path", QMessageBox.Ok)
@@ -61,7 +59,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.expandedLineEdit.setText(" ".join(expanded_query))
 
-        relevant = benchmarking.load_results(self.folder_path, query)
+        relevant = evaluating.load_results(self.folder_path, query)
         retrieved = [r[0] for r in results]
 
         if relevant:
