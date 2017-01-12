@@ -20,7 +20,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.expandQueryChB.clicked.connect(self.on_expand_query_clicked)
         self.feedBackBtn.clicked.connect(self.on_feedback_clicked)
         self.resultslistWidget.doubleClicked.connect(self.open_file)
-        self.resultslistWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.numberSpinBox.valueChanged.connect(self.count_change)
 
         self.groupBoxExpanded.setVisible(False)
         self.inferedLabel.setVisible(False)
@@ -30,6 +30,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.languagesCB.setCurrentIndex(languages.index("english"))
         self.dir = None
 
+        self.numberSpinBox.setValue(5)
         self.belief_network = BeliefNetwork()
 
     def open_file(self):
@@ -73,27 +74,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.full_list = results
         results = results[:min(len(results), count)]
 
-        relevant = evaluating.load_results(self.folder_path, query)
+        self.relevant = evaluating.load_results(self.folder_path, query)
         retrieved = [r[0] for r in results]
 
+        self.print_stats(self.relevant, retrieved)
+        self.print_results(results)
+
+    def on_feedback_clicked(self):
+        if not self.resultslistWidget.selectedItems():
+            QMessageBox.critical(self, "Error", "Select relevant documents.", QMessageBox.Ok)
+        else:
+            count = self.numberSpinBox.value()
+            selected_docs = [i.text().split(':')[0] for i in self.resultslistWidget.selectedItems()]
+            new_list = retroalimentation.retroalimentation(self.full_list, selected_docs, self.belief_network)
+            self.full_list = new_list
+            new_list = new_list[:min(len(new_list), count)]
+
+            self.print_results(new_list)
+
+            self.print_stats(self.relevant, [r[0] for r in new_list])
+
+    def count_change(self):
+        count = self.numberSpinBox.value()
+        new_list = self.full_list[:count]
+        self.print_results(new_list)
+        self.print_stats(self.relevant, [r[0] for r in new_list])
+
+    def print_stats(self, relevant, retrieved):
         a = ["precision", "recall", "f_measure", "e_measure"]
-        print(a)
         if relevant:
             eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=retrieved)
-
             for ind, v in enumerate(a):
                 print(v + ": " + str(eval[v]))
                 item = QTableWidgetItem("%.5f" % (eval[v]))
                 self.tableWidget.setItem(0, ind, item)
-
-        self.print_results(results)
-
-    def on_feedback_clicked(self):
-        count = self.numberSpinBox.value()
-        selected_docs = [i.text().split(':')[0] for i in self.resultslistWidget.selectedItems()]
-        new_list = retroalimentation.retroalimentation(self.full_list, selected_docs, 0, self.belief_network)
-        new_list = new_list[:min(len(new_list), count)]
-        self.print_results(new_list)
 
     def print_results(self, results):
         self.resultslistWidget.clear()
