@@ -47,12 +47,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # try:
         self.queryBtn.setEnabled(True)
 
-        language = self.languagesCB.currentText()
+        language = self.languagesCB.currentText() if self.languagesCB.currentText() != 'infer' else None
         res, infered = self.belief_network.build(self.folder_path, language)
-        if language == "infer" and res:
+        if language is None and res:
             self.inferedLabel.setText("Infered language: " + infered)
             self.inferedLabel.setVisible(True)
-        if language != "infer":
+        if language is not None:
             self.inferedLabel.setVisible(False)
         self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
         # except:
@@ -66,26 +66,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         results, expanded_query = self.belief_network.query(query, expand_query)
         self.expandedLineEdit.setText(" ".join(expanded_query))
         results.sort(key=lambda t: t[1], reverse=True)        
-	results = results[:min(len(results), count)]
+        results = results[:min(len(results), count)]
 
         relevant = evaluating.load_results(self.folder_path, query)
         retrieved = [r[0] for r in results]
 
-        a = ["presicion", "recall", "f_measure", "e_measure"]
+        a = ["precision", "recall", "f_measure", "e_measure"]
         print(a)
         if relevant:
             eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=retrieved)       
 
             for ind, v in enumerate(a):
-                print(v + ":" + eval[v])
-                item = QTableWidgetItem(eval[v])
-                self.tableWidget.setItem(item, 1, ind)
+                print(v + ": " + str(eval[v]))
+                item = QTableWidgetItem("%5f" %(eval[v]))
+                self.tableWidget.setItem(0, ind,  item)
         
         self.resultslistWidget.clear()
-	if results:
-		self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
-	else:
-		self.resultslistWidget.addItem('No results.')
+        if results:
+            self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
+        else:
+            self.resultslistWidget.addItem('No results.')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
