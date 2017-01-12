@@ -8,6 +8,8 @@ import os
 import processing
 
 
+#TODO añadir checkbox index?
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -42,7 +44,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             language = self.languagesCB.currentText()
 
-            self.belief_network.build(self.folder_path, language)
+            self.belief_network.build(self.folder_path, language, index=True)
             self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
         except:
             QMessageBox.critical(self, "Error", "Wrong path", QMessageBox.Ok)
@@ -52,9 +54,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         count = self.numberSpinBox.value()
 
         expand_query = self.expandQueryChB.isChecked()
+
         results, expanded_query = self.belief_network.query(query, expand_query)
-        self.expandedLineEdit.setText(" ".join(expanded_query))
+        results.sort(key=lambda t: t[1], reverse=True)
         results = results[:min(len(results), count)]
+
+        self.expandedLineEdit.setText(" ".join(expanded_query))
 
         relevant = benchmarking.load_results(self.folder_path, query)
         retrieved = [r[0] for r in results]
@@ -65,7 +70,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.statisticslistWidget.addItems([str(k) + ': ' + str(v) for k, v in eval.items()])
 
         self.resultslistWidget.clear()
-        self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
+
+        if results:
+            self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
+        else:
+            self.resultslistWidget.addItem('No results.')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

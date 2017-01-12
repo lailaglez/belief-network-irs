@@ -81,11 +81,15 @@ def process_query(query, language, expand_query):
     if expand_query:
         for q in query:
             ss = wordnet.synsets(q)
-            if len(ss) == 1:
-                for l in ss[0].lemmas():
+            # if len(ss) == 1:
+            #     for l in ss[0].lemmas():
+            #         result.extend(l.name().split('_'))
+            for s in ss:
+                for l in s.lemmas():
                     result.extend(l.name().split('_'))
 
     stemmer = nltk.SnowballStemmer(language)
+
     stopwordlist = stopwords.words(language)
 
     return [stemmer.stem(w) for w in result if w not in stopwordlist]

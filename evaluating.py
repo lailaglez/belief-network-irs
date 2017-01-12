@@ -12,16 +12,22 @@ def evaluate(relevant_documents, retrieved_documents):
 
 
 def precision(relevant_documents, retrieved_documents):
+    if len(retrieved_documents) == 0:
+        return 0
     retrieved_relevant_documents = relevant_documents.intersection(retrieved_documents)
     return len(retrieved_relevant_documents) / len(retrieved_documents)
 
 
 def recall(relevant_documents, retrieved_documents):
+    if len(retrieved_documents) == 0:
+        return 0
     retrieved_relevant_documents = relevant_documents.intersection(retrieved_documents)
     return len(retrieved_relevant_documents) / len(relevant_documents)
 
 
 def r_precision(relevant_documents, retrieved_documents, r):
+    if len(retrieved_documents) == 0:
+        return math.inf
     retrieved_relevant_documents = relevant_documents.intersection(set(retrieved_documents[:r]))
     return len(retrieved_relevant_documents) / len(retrieved_documents)
 

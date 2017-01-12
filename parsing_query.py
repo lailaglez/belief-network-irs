@@ -20,8 +20,8 @@ def parse_query(s):
             query = query.replace('?', '')
             query = query.replace('.', '')
             query = query.replace(',', '')
-            query = query.replace('\n', '')
-            d[query_number] = query.lower()
+            query = query.replace('\n', ' ')
+            d[query_number] = query.lower().strip()
             i += 1
 
     return d

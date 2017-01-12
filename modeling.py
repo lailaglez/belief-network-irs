@@ -110,12 +110,13 @@ class BeliefNetwork():
     docs -> Number of documents in database
     """
 
-    def build(self, path, language):
+    def build(self, path, language, index=False):
         documents, self.language = processing.process(path, language)
         if documents is None:
             return False, self.language
         self.documents = [d for d in documents]
         self.N = len(self.documents)
+        self.documents_dictionary = documents
         self.Dictionary = {}
         self.VM = VectorModel(self.Dictionary, self.N)
         for d, v in documents.items():
@@ -126,28 +127,39 @@ class BeliefNetwork():
                     self.Dictionary[t][d] = 0
                 self.Dictionary[t][d] += 1
         self.keys = self.Dictionary.keys()
-        self.weights = indexing.create(self.keys, self.documents, self.VM)
+        self.index = indexing.create(self.documents, documents, self.VM) if index else None
+        self.memory = {}
         return True, self.language
 
     # Este método realiza la query usando el índice generado
-    def query(self, query, expand_query):
+    def query(self, query, expand_query=False):
         q = processing.process_query(query, self.language, expand_query)
         rank = self.Rank(q)
         documents = [(k, v) for k, v in rank.items() if v > 0]
-        documents.sort(key=lambda t: t[1], reverse=True)
         return documents, q
 
     def P_dj_q(self, dj, q):
-        # Pk = math.log((0.5) ** (len(self.Dictionary)))
+        # Pk = (0.5) ** (self.N)
         Pk = 1
         S = 0
         for ki in q:
             if ki in self.Dictionary and dj in self.Dictionary[ki]:
-                Pqk = self.VM.Wq(ki, q) / math.sqrt(sum([self.VM.Wq(kj, q) ** 2 for kj in self.Dictionary]))
-                Pdk = self.weights[ki][dj] / math.sqrt(sum([self.weights[kj][dj] ** 2 for kj in self.Dictionary]))
-                if Pqk == 0 or Pdk == 0 or Pk == 0:
-                    S += 0
+                Pqk = self.VM.Wq(ki, q) / math.sqrt(sum([self.VM.Wq(kj, q) ** 2 for kj in q if kj in self.Dictionary]))
+
+                if self.index:
+                    Pdk = self.index[ki][dj] if ki in self.index and dj in self.index[ki] else 0
                 else:
+                    # Pdk = self.VM.Wq(ki, dj) / math.sqrt(sum([self.VM.Wq(kj,dj) ** 2 for kj in self.documents_dictionary[dj]]))
+
+                    if ki in self.memory and dj in self.memory[ki]:
+                        Pdk = self.memory[ki][dj]
+                    else:
+                        Pdk = self.VM.Wq(ki, dj) / math.sqrt(sum([self.VM.Wq(kj,dj) ** 2 for kj in self.documents_dictionary[dj]]))
+                        if not ki in self.memory:
+                            self.memory[ki] = {}
+                        self.memory[ki][dj] = Pdk
+
+                if Pqk != 0 and Pdk != 0 and Pk != 0:
                     S += Pqk + Pdk + Pk
                     #S += (math.log(Pqk)+math.log(Pdk)+math.log(Pk))
         return S
