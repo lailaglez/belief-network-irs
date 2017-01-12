@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/media/jose/Storage/Schools/Universidad/5to ano/1er Semestre/Sistema de informacion/SI-Amalia-Laila-Jose/UI/main.ui'
+# Form implementation generated from reading ui file 'D:\Schools\Universidad\5to ano\1er Semestre\Sistema de informacion\SI-Amalia-Laila-Jose\UI\main.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -70,7 +70,8 @@ class Ui_MainWindow(object):
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
         self.numberSpinBox = QtGui.QSpinBox(self.groupBox_2)
-        self.numberSpinBox.setProperty("value", 5)
+        self.numberSpinBox.setMaximum(9999999)
+        self.numberSpinBox.setProperty("value", 0)
         self.numberSpinBox.setObjectName(_fromUtf8("numberSpinBox"))
         self.gridLayout.addWidget(self.numberSpinBox, 1, 1, 1, 1)
         spacerItem1 = QtGui.QSpacerItem(358, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -97,11 +98,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.groupBoxExpanded)
         self.groupBox_3 = QtGui.QGroupBox(self.centralwidget)
         self.groupBox_3.setObjectName(_fromUtf8("groupBox_3"))
-        self.verticalLayout = QtGui.QVBoxLayout(self.groupBox_3)
-        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+        self.gridLayout_3 = QtGui.QGridLayout(self.groupBox_3)
+        self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.resultslistWidget = QtGui.QListWidget(self.groupBox_3)
         self.resultslistWidget.setObjectName(_fromUtf8("resultslistWidget"))
-        self.verticalLayout.addWidget(self.resultslistWidget)
+        self.gridLayout_3.addWidget(self.resultslistWidget, 0, 0, 1, 2)
+        spacerItem2 = QtGui.QSpacerItem(651, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.gridLayout_3.addItem(spacerItem2, 1, 0, 1, 1)
+        self.feedBackBtn = QtGui.QPushButton(self.groupBox_3)
+        self.feedBackBtn.setObjectName(_fromUtf8("feedBackBtn"))
+        self.gridLayout_3.addWidget(self.feedBackBtn, 1, 1, 1, 1)
         self.verticalLayout_3.addWidget(self.groupBox_3)
         self.groupBox_4 = QtGui.QGroupBox(self.centralwidget)
         self.groupBox_4.setObjectName(_fromUtf8("groupBox_4"))
@@ -109,6 +115,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
         self.tableWidget = QtGui.QTableWidget(self.groupBox_4)
         self.tableWidget.setMaximumSize(QtCore.QSize(411, 55))
+        self.tableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.tableWidget.setDefaultDropAction(QtCore.Qt.IgnoreAction)
+        self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+        self.tableWidget.setShowGrid(True)
         self.tableWidget.setCornerButtonEnabled(False)
         self.tableWidget.setRowCount(1)
         self.tableWidget.setColumnCount(4)
@@ -127,7 +137,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.groupBox_4)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 773, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 773, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -150,6 +160,7 @@ class Ui_MainWindow(object):
         self.expandQueryChB.setText(_translate("MainWindow", "Expand query", None))
         self.groupBoxExpanded.setTitle(_translate("MainWindow", "Expanded Query", None))
         self.groupBox_3.setTitle(_translate("MainWindow", "Results", None))
+        self.feedBackBtn.setText(_translate("MainWindow", "Feedback", None))
         self.groupBox_4.setTitle(_translate("MainWindow", "Statistics", None))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Precision", None))

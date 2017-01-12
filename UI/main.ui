@@ -108,8 +108,11 @@
        </item>
        <item row="1" column="1">
         <widget class="QSpinBox" name="numberSpinBox">
+         <property name="maximum">
+          <number>9999999</number>
+         </property>
          <property name="value">
-          <number>5</number>
+          <number>0</number>
          </property>
         </widget>
        </item>
@@ -179,9 +182,29 @@
       <property name="title">
        <string>Results</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0" colspan="2">
         <widget class="QListWidget" name="resultslistWidget"/>
+       </item>
+       <item row="1" column="0">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>651</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="feedBackBtn">
+         <property name="text">
+          <string>Feedback</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -199,6 +222,18 @@
            <width>411</width>
            <height>55</height>
           </size>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="defaultDropAction">
+          <enum>Qt::IgnoreAction</enum>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+         <property name="showGrid">
+          <bool>true</bool>
          </property>
          <property name="cornerButtonEnabled">
           <bool>false</bool>
@@ -249,7 +284,7 @@
      <x>0</x>
      <y>0</y>
      <width>773</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

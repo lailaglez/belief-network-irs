@@ -6,7 +6,7 @@ import subprocess
 import sys
 import os
 import processing
-
+import retroalimentation
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -17,7 +17,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.buildBtn.clicked.connect(self.on_build_clicked)
         self.queryBtn.clicked.connect(self.on_query_clicked)
         self.expandQueryChB.clicked.connect(self.on_expand_query_clicked)
+        self.feedBackBtn.clicked.connect(self.on_feedback_clicked)
         self.resultslistWidget.doubleClicked.connect(self.open_file)
+        self.resultslistWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
         self.groupBoxExpanded.setVisible(False)
         self.inferedLabel.setVisible(False)
@@ -54,7 +56,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.inferedLabel.setVisible(True)
         if language is not None:
             self.inferedLabel.setVisible(False)
-        self.names = [str(name) for name in os.listdir(self.folder_path) if name.endswith('.pdf') or name.endswith('.txt')]
+        self.names = [str(name) for name in os.listdir(self.folder_path) if
+                      name.endswith('.pdf') or name.endswith('.txt')]
         # except:
         #     QMessageBox.critical(self, "Error", "Wrong path", QMessageBox.Ok)
 
@@ -65,7 +68,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         expand_query = self.expandQueryChB.isChecked()
         results, expanded_query = self.belief_network.query(query, expand_query)
         self.expandedLineEdit.setText(" ".join(expanded_query))
-        results.sort(key=lambda t: t[1], reverse=True)        
+        results.sort(key=lambda t: t[1], reverse=True)
+        self.full_list = results
         results = results[:min(len(results), count)]
 
         relevant = evaluating.load_results(self.folder_path, query)
@@ -74,18 +78,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         a = ["precision", "recall", "f_measure", "e_measure"]
         print(a)
         if relevant:
-            eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=retrieved)       
+            eval = evaluating.evaluate(relevant_documents=relevant, retrieved_documents=retrieved)
 
             for ind, v in enumerate(a):
                 print(v + ": " + str(eval[v]))
-                item = QTableWidgetItem("%5f" %(eval[v]))
-                self.tableWidget.setItem(0, ind,  item)
-        
+                item = QTableWidgetItem("%.5f" % (eval[v]))
+                self.tableWidget.setItem(0, ind, item)
+
+        self.print_results(results)
+
+    def on_feedback_clicked(self):
+        count = self.numberSpinBox.value()
+        selected_docs = [i.text().split(':')[0] for i in self.resultslistWidget.selectedItems()]
+        new_list = retroalimentation.retroalimentation(self.full_list, selected_docs, 0, self.belief_network)
+        new_list = new_list[:min(len(new_list), count)]
+        self.print_results(new_list)
+
+    def print_results(self, results):
         self.resultslistWidget.clear()
         if results:
             self.resultslistWidget.addItems([str(t[0]) + ': ' + str(t[1]) for t in results])
         else:
             self.resultslistWidget.addItem('No results.')
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
