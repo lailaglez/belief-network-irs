@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
@@ -24,10 +24,10 @@
        <set>Qt::AlignCenter</set>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0" colspan="3">
+       <item row="0" column="0" colspan="4">
         <widget class="QLineEdit" name="pathLineEdit"/>
        </item>
-       <item row="0" column="3">
+       <item row="0" column="4">
         <widget class="QPushButton" name="browseBtn">
          <property name="text">
           <string>Browse...</string>
@@ -35,29 +35,36 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>390</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="1">
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Languages available</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item row="1" column="1">
         <widget class="QComboBox" name="languagesCB"/>
        </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="inferedLabel">
+         <property name="text">
+          <string>Language infered:</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="3">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>260</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="4">
         <widget class="QPushButton" name="buildBtn">
          <property name="text">
           <string>Build Index</string>
@@ -134,6 +141,9 @@
            <height>42</height>
           </size>
          </property>
+         <property name="documentTitle">
+          <string/>
+         </property>
          <property name="readOnly">
           <bool>false</bool>
          </property>
@@ -181,9 +191,52 @@
       <property name="title">
        <string>Statistics</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QListWidget" name="statisticslistWidget"/>
+        <widget class="QTableWidget" name="tableWidget">
+         <property name="maximumSize">
+          <size>
+           <width>411</width>
+           <height>55</height>
+          </size>
+         </property>
+         <property name="cornerButtonEnabled">
+          <bool>false</bool>
+         </property>
+         <property name="rowCount">
+          <number>1</number>
+         </property>
+         <property name="columnCount">
+          <number>4</number>
+         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <row/>
+         <column>
+          <property name="text">
+           <string>Precision</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Recall</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>F_measure</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>E_measure</string>
+          </property>
+         </column>
+        </widget>
        </item>
       </layout>
      </widget>
